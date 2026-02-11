@@ -1,7 +1,7 @@
 {
   "name": "@ecomm/ui-components",
   "version": "1.0.0",
-  "description": "Shared UI component library for e-commerce applications",
+  "description": "Storefront-specific page templates for e-commerce applications",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
@@ -25,6 +25,7 @@
     "react-dom": ">=18.0.0"
   },
   "dependencies": {
+    "@ecomm/shared-ui-components": "*",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.0",
     "@radix-ui/react-avatar": "^1.1.0",

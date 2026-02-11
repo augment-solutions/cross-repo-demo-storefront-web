@@ -49,7 +49,7 @@
     "@radix-ui/react-radio-group": "^1.1.3",
     "@radix-ui/react-slider": "^1.1.2",
     "@heroicons/react": "^2.1.0",
-    "@ecomm/ui-components": "workspace:*"
+    "@ecomm/shared-ui-components": "file:/shared-ui-components/ecomm-shared-ui-components-1.0.0.tgz"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

@@ -4,22 +4,30 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy ui-components package first
-COPY packages/ui-components /packages/ui-components
-WORKDIR /packages/ui-components
+# ============================================
+# Stage 1: Build the shared UI components library
+# ============================================
+# Copy from the named build context "shared-ui"
+COPY --from=ui-components packages/ui-components /shared-ui-components
 
-# Build ui-components with BuildKit cache mount
+WORKDIR /shared-ui-components
+
+# Install dependencies and build the shared library
 RUN --mount=type=cache,target=/root/.npm,sharing=locked \
     npm install && npm run build
 
-# Back to app directory
+# Create tarball from the built package
+RUN npm pack --pack-destination /shared-ui-components
+
+# ============================================
+# Stage 2: Build the storefront-web application
+# ============================================
 WORKDIR /app
 
-# Copy package files and update workspace reference
+# Copy package files
 COPY services/storefront-web/package*.json ./
-RUN sed -i 's|"workspace:\*"|"file:/packages/ui-components"|g' package.json
 
-# Install dependencies with BuildKit cache mount
+# Install dependencies (tarball path must match package.json reference)
 RUN --mount=type=cache,target=/root/.npm,sharing=locked \
     npm install
 
@@ -32,7 +40,9 @@ RUN mkdir -p public
 # Build the application
 RUN npm run build
 
+# ============================================
 # Production stage
+# ============================================
 FROM node:20-alpine AS runner
 
 WORKDIR /app
